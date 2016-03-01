@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<job id="eatJob" xmlns="http://www.springframework.org/schema/batch">
+    <step id="stepCook" next="stepEntries">
+        <tasklet>
+            <chunk reader="cookReader" writer="cookProcessor"
+                   processor="cookWriter" commit-interval="1"/>
+        </tasklet>
+    </step>
+    <step id="stepEntries" next="stepMeat">
+        <tasklet>
+            <chunk reader="entriesReader" writer="entriesProcessor"
+                   processor="entriesWriter" commit-interval="1"/>
+        </tasklet>
+    </step>
+    <step id="stepMeat" next="stepWine">
+        <tasklet ref="drinkSomeWine"/>
+    </step>
+    <step id="stepWine" next="clean">
+        <tasklet>
+            <chunk reader="wineReader" writer="wineProcessor"
+                   processor="wineWriter" commit-interval="1"/>
+        </tasklet>
+    </step>
+    <step id="clean">
+        <tasklet ref="cleanTheTable"/>
+    </step>
+</job>

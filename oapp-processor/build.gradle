@@ -1,0 +1,46 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.2.RELEASE")
+    }
+}
+
+if (!hasProperty("buildProfile"))
+    ext.buildProfile = "default"
+apply from: "profile-${ext.buildProfile}.gradle"
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+jar {
+    baseName = 'gs-batch-processing'
+    version =  '0.1.0'
+}
+
+def versions = [
+        mysql: '5.1.38',
+        elasticsearch: '2.2.0'
+];
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-batch"
+    compile "org.hsqldb:hsqldb"
+    compile "mysql:mysql-connector-java:${versions['mysql']}"
+    compile "org.elasticsearch:elasticsearch:${versions['elasticseach']}"
+    testCompile "junit:junit"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
